@@ -1,0 +1,10 @@
+pandas
+numpy
+joblib
+matplotlib
+seaborn
+scikit-learn
+streamlit
+pdfplumber
+lime
+shap
