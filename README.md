@@ -9,20 +9,34 @@ This project utilizes machine learning to predict patient response to stimulatio
 
 ## 📂 Project Structure
 
-* **`src/preprocessing/clean_dataset.py`**: Handles all initial data cleaning tasks (deduplication, protocol standardization) to ensure raw data integrity.
-* **`notebooks/Workshop.ipynb`**: The central experimentation hub. This notebook contains:
-    * **Feature Engineering:** Comprehensive selection process using both statistical methods (Pearson Correlation, Hypothesis Testing/ANOVA) and model-based selection (Decision Trees, Linear Models).
-    * **Model Selection:** Grid Search comparisons of SVM, Random Forest, XGBoost, and Logistic Regression to identify the Champion Model.
-    * **Explainable AI (XAI):** Full implementation of SHAP and LIME to interpret model decisions.
-* **`src/model/train.py`**: The production-ready training script that builds and saves the final Champion Pipeline.
-* Other files present in the folder as needed.
+```text
+ivf-response-prediction/
+├── data/
+│   └── raw/                   # Raw patient CSVs
+├── extract_pdf/               # PDF Parsing Module
+│   ├── extract_pdf.py         # Main PDF parsing logic
+│   └── helper_functions.py    # Regex helpers for clinical data extraction
+├── notebooks/
+│   └── Workshop.ipynb         # Experimentation Hub: Feature Selection, Grid Search, & XAI
+├── src/
+│   ├── api/
+│   │   └── app.py             # Streamlit Dashboard Application
+│   ├── model/
+│   │   ├── train.py           # Production training pipeline
+│   │   └── predict.py         # Inference logic
+│   ├── preprocessing/
+│   │   ├── clean_dataset.py   # Data cleaning & standardization
+│   │   └── feature_engineering.py
+├── requirements.txt
+└── README.md
 
 ---
+
 
 ## 🚀 Key Features
 * **Safety-First Classification:** Optimized decision thresholds to prioritize **Recall** for the "High Response" class, acting as an early warning system for OHSS.
 * **Rigorous Preprocessing:**
-    * **MICE Imputation:** Handles missing biomarkers (AFC/AMH) using correlations.
+    * **MICE Imputation:** Handled missing biomarkers (AFC/AMH) using correlations.
     * **Biologically-Aware Feature Engineering:** Discretized Age into clinically relevant groups (e.g., >40 cliff).
     * **Custom Normalization:** Applied Square Root transformations to skewed features (AFC) before scaling.
 * **Explainable AI (XAI):**
@@ -64,9 +78,9 @@ The SHAP summary plot confirms the model follows biological principles:
 
 ### Local Logic (LIME)
 LIME analysis of individual cases (e.g., Patient #5) demonstrated the model's nuance:
-* *Scenario:* A young patient (high-risk demographic) with average AFC (low-risk biomarker).
+* *Scenario:* A young patient (high risk demographic) with average AFC (low risk biomarker).
 * *Prediction:* **Optimal** (Correct).
-* *Reasoning:* The model correctly prioritized the **biomarkers over age**, avoiding a False Positive.
+* *Reasoning:* The model correctly prioritized the **biomarkers over the age**, avoiding a False Positive.
 
 ---
 
@@ -77,7 +91,24 @@ LIME analysis of individual cases (e.g., Patient #5) demonstrated the model's nu
 * `pandas`, `numpy`, `scikit-learn`, `matplotlib`, `seaborn`, `shap`, `lime`
 
 ### Setup
-1. **Clone the repository:**
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/Iyed0092/ivf-response-prediction.git](https://github.com/Iyed0092/ivf-response-prediction.git)
+    cd ivf-response-prediction
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+### Running the Training Pipeline
+To retrain the Champion Model and generate the pipeline file:
 ```bash
-git clone https://github.com/Iyed0092/ivf-response-prediction.git
-cd ivf-response-prediction
+python src/model/train.py
+
+
+### Running the Dashboard
+To Run our Dashboard type :
+```bash
+streamlit run src/api/app.py
